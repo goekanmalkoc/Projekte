@@ -78,5 +78,6 @@ def logout():
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()  # Veritabanı tablolarını oluşturur
-    app.run(debug=True, port=4000)
+    # app.run(debug=True, port=4000)
+    app.run(host='0.0.0.0', port=80)  # HTTP için 80 portunu kullan
 
