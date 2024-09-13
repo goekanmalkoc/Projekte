@@ -1,0 +1,53 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form method="POST">
+        <input type="text" name="message">
+        <input type="submit" value="Gönder">
+    </form>
+
+{% if message %}
+    <h1> {{ message }} </h1>
+{% else %}
+    <h1> "There is no message in here..."</h1> 
+{% endif %}
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flask Message Page</title>
+</head>
+<body>
+    <h1>This is my first conditions experience</h1>
+
+    
+    <!-- Form to submit a message -->
+    <form method="POST" action="/">
+        <label for="message">Enter your message:</label>
+        <input type="text" id="message" name="message">
+        <button type="submit">Submit</button>
+    </form>
+    <br>
+    <!-- Display the message if it exists -->
+    {% if message %}
+    <p>Your message: {{ message }}</p>
+    {% endif %}
+
+    <!-- Display the error if there's no input -->
+    {% if error %}
+    <p style="color:red;">{{ error }}</p>
+    {% endif %}
+    <br>
+    <!-- Link to the list page -->
+    <a href="/list">Go to Numbers List</a>
+</body>
+</html>

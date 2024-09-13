@@ -1,0 +1,39 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+<ul>
+{% for x in object %}
+     
+        <h2><li>Welcome to Clarusway {{ x }}!</li></h2>
+    
+{% endfor %} 
+</ul>
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Number List</title>
+</head>
+<body>
+    <h1>Here is a list of numbers:</h1>
+
+    <!-- Display the numbers one by one -->
+    <ul>
+        {% for num in object %}
+            <li>{{ num }}</li>
+        {% endfor %}
+    </ul>
+
+    <!-- Link to go back to the index page -->
+    <a href="/">Go to Home</a>
+</body>
+</html>
