@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Number Input</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Enter Numbers</h1>
+    <form method="POST">
+        {% for i in range(1, 6) %}
+            <label for="number{{ i }}">Enter number {{ i }}:</label>
+            <input type="number" name="number{{ i }}" required><br>
+        {% endfor %}
+        <input type="submit" value="Submit">
+    </form>
+
+    {% if numbers %}
+        <h2>Entered Numbers: {{ numbers }}</h2>
+        <p>Smallest number: {{ smallest }}</p>
+        <p>Largest number: {{ largest }}</p>
+    {% endif %}
+</body>
+</html>
