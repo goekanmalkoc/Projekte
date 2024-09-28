@@ -31,10 +31,10 @@ Parameters:
       - t3.medium
     ConstraintDescription: "Must be a valid EC2 instance type."
 
-    SecurityGroupPN:
-      Description: "SecurityGroup secmelisiniz"
-      Type: List<AWS::EC2::SecurityGroup::Id>
-      ConstraintDescription: "Must be an existing EC2 Securty Group" 
+  SecurityGroupPN:
+    Description: "SecurityGroup secmelisiniz"
+    Type: List<AWS::EC2::SecurityGroup::Id>
+    ConstraintDescription: "Must be an existing EC2 Securty Group" 
 
 Resources:
   WebServerHost:
@@ -49,21 +49,38 @@ Resources:
         - Key: Name
           Value: !Sub Web Server of ${AWS::StackName}
       UserData: 
-       !Base64 |
-        #! /bin/bash
-        dnf update -y
-        dnf install -y python3 python3-pip git
+        !Base64 |
+          #!/bin/bash
+          set -e
 
-        pip3 install virtualenv
-        virtualenv venv
-        source venv/bin/activate
+          # Gerekli sistem paketlerini yükle
+          dnf update -y
+          dnf install -y git wget unzip
 
-        pip install Flask
+          # Python ve pip'i yükle
+          dnf install -y python3 python3-pip
 
-        git clone https://github.com/goekanmalkoc/Projekte.git /home/ec2-user/my_flask_app
-        cd /home/ec2-user/my_flask_app/flask-_01_02_Jinja_Template/neu_projeckt
+          # virtualenv'i yükle ve sanal bir ortam oluştur
+          pip3 install virtualenv
+          mkdir ~/my_flask_app
+          cd ~/my_flask_app
+          virtualenv venv
+          source venv/bin/activate
 
-  
+          # Flask'ı sanal ortamda yükle
+          pip install Flask
+
+          # Flask uygulamasını indir
+          wget https://github.com/goekanmalkoc/Projekte/raw/main/Flask/Find_Larg_Small_Num/Find_Larg_Small_Num.zip
+
+          # İndirilen ZIP dosyasını aç
+          unzip Find_Larg_Small_Num.zip
+          cd Find_Larg_Small_Num
+
+          # Flask uygulamasını çalıştır
+          nohup python app.py &
+
+
 Outputs:
   WebSiteURL:
     Value: !Sub 
