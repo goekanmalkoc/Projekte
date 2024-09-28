@@ -1,0 +1,106 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: |
+  CloudFormation Template for Roman Numerals Converter Application. 
+  This template creates Python Flask Web Application on Amazon Linux 2 AMI
+  (latest ami) EC2 Instance with custom security group 
+  allowing http connections on port 80 and SSH connection on port 22. 
+  Roman Numerals Converter Application is downloaded from Github 
+  repository, then installed on Flask.
+  
+Parameters:
+  KeypairId:
+    Description: Select your keypair
+    Type: AWS::EC2::KeyPair::KeyName
+    ConstraintDescription: "Must be an existing EC2 KeyPair."
+
+  LatestAmiId:
+    Description: Select your AMI
+    Type: 'AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>'
+    Default: '/aws/service/ami-amazon-linux-latest/al2023-ami-kernel-6.1-x86_64'
+
+  InstanceType:
+    Description: "EC2 Instance Type"
+    Type: String
+    Default: "t2.micro"
+    AllowedValues: 
+      - t2.micro
+      - t2.small
+      - t2.medium
+      - t3.micro
+      - t3.small
+      - t3.medium
+    ConstraintDescription: "Must be a valid EC2 instance type."
+
+  # SecurityGroupPN:
+  #   Description: "SecurityGroup secmelisiniz"
+  #   Type: List<AWS::EC2::SecurityGroup::Id>
+  #   ConstraintDescription: "Must be an existing EC2 Securty Group" 
+
+Resources:
+
+    WebServerSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow 22 and 80 port # Required
+      SecurityGroupIngress: 
+        - CidrIp: 0.0.0.0/0
+          FromPort: 22
+          IpProtocol: tcp
+          ToPort: 22
+        - CidrIp: 0.0.0.0/0
+          FromPort: 80
+          IpProtocol: tcp
+          ToPort: 80
+
+  WebServerHost:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: !Ref LatestAmiId
+      InstanceType: !Ref InstanceType
+      KeyName: !Ref KeypairId
+      SecurityGroupIds: 
+        - !Ref WebServerSecurityGroup
+      Tags: 
+        - Key: Name
+          Value: !Sub Web Server of ${AWS::StackName}
+      UserData: 
+        !Base64 |
+          #!/bin/bash
+          set -e
+
+          # Gerekli sistem paketlerini yükle
+          dnf update -y
+          dnf install -y git wget unzip
+
+          # Python ve pip'i yükle
+          dnf install -y python3 python3-pip
+
+          # virtualenv'i yükle ve sanal bir ortam oluştur
+          pip3 install virtualenv
+          mkdir ~/my_flask_app
+          cd ~/my_flask_app
+          virtualenv venv
+
+          # Flask'ı sanal ortamda yükle
+          ~/my_flask_app/venv/bin/pip install Flask
+
+          # Flask uygulamasını indir
+          wget https://github.com/goekanmalkoc/Projekte/raw/main/Flask/Roman_num_convert/Roman_num_convert.zip
+
+          # İndirilen ZIP dosyasını aç
+          unzip Find_Larg_Small_Num.zip
+          cd Find_Larg_Small_Num
+
+          # Flask uygulamasını çalıştır
+          nohup ~/my_flask_app/venv/bin/python app.py &
+
+Outputs:
+  WebSiteURL:
+    Value: !Sub 
+     - http://${WebSiteURL}
+     - WebSiteURL: !GetAtt WebServerHost.PublicDnsName
+
+  PrivateIp:
+    Value: !Sub 
+     - Private Ip of instance is ${Privateip}
+     - Privateip: !GetAtt WebServerHost.PrivateIp

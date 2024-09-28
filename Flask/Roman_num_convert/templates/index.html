@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dezimal zu Römisch</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Dezimal zu Römisch Konverter</h1>
+        <form method="POST">
+            <label for="number">Zahl (1 bis 3999):</label>
+            <input type="text" id="number" name="number" placeholder="Geben Sie eine Zahl ein" required>
+            <button type="submit">Konvertieren</button>
+        </form>
+        <div class="result">
+            <p>{{ roman_numeral }}</p>
+        </div>
+    </div>
+</body>
+</html>
