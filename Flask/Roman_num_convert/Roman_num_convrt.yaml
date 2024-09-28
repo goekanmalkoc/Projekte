@@ -38,7 +38,7 @@ Parameters:
 
 Resources:
 
-    WebServerSecurityGroup:
+  WebServerSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
       GroupDescription: Allow 22 and 80 port # Required
@@ -71,11 +71,13 @@ Resources:
           # Gerekli sistem paketlerini yükle
           dnf update -y
           dnf install -y git wget unzip
-
-          # Python ve pip'i yükle
           dnf install -y python3 python3-pip
 
+          # Kullanıcı dizinine geç
+          # cd /home/ec2-user
+
           # virtualenv'i yükle ve sanal bir ortam oluştur
+        
           pip3 install virtualenv
           mkdir ~/my_flask_app
           cd ~/my_flask_app
@@ -88,10 +90,12 @@ Resources:
           wget https://github.com/goekanmalkoc/Projekte/raw/main/Flask/Roman_num_convert/Roman_num_convert.zip
 
           # İndirilen ZIP dosyasını aç
-          unzip Find_Larg_Small_Num.zip
-          cd Find_Larg_Small_Num
+          unzip Roman_num_convert.zip
+          cd Roman_num_convert
 
           # Flask uygulamasını çalıştır
+          # nohup python3 app.py &  # Flask uygulamasını arka planda Python 3 ile çalıştır
+          
           nohup ~/my_flask_app/venv/bin/python app.py &
 
 Outputs:
