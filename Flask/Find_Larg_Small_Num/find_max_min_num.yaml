@@ -16,7 +16,7 @@ Parameters:
   LatestAmiId:
     Description: Select your AMI
     Type: 'AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>'
-    Default: '/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2'
+    Default: '/aws/service/ami-amazon-linux-latest/al2023-ami-kernel-6.1-x86_64'
 
   InstanceType:
     Description: "EC2 Instance Type"
@@ -65,10 +65,9 @@ Resources:
           mkdir ~/my_flask_app
           cd ~/my_flask_app
           virtualenv venv
-          source venv/bin/activate
 
           # Flask'ı sanal ortamda yükle
-          pip install Flask
+          ~/my_flask_app/venv/bin/pip install Flask
 
           # Flask uygulamasını indir
           wget https://github.com/goekanmalkoc/Projekte/raw/main/Flask/Find_Larg_Small_Num/Find_Larg_Small_Num.zip
@@ -78,7 +77,8 @@ Resources:
           cd Find_Larg_Small_Num
 
           # Flask uygulamasını çalıştır
-          nohup python app.py &
+          nohup ~/my_flask_app/venv/bin/python app.py &
+
 
 
 Outputs:
